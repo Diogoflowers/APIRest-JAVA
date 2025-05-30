@@ -4,6 +4,7 @@ package com.didi.todoapi.service;
 import com.didi.todoapi.domain.Task;
 import com.didi.todoapi.dto.TaskRequestDTO;
 import com.didi.todoapi.dto.TaskResponseDTO;
+import com.didi.todoapi.mapper.TaskMapper;
 import com.didi.todoapi.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,22 +25,11 @@ public class TaskService {
     }
 
 
-    public TaskResponseDTO createTask(@RequestBody TaskRequestDTO dto) {
-        Task task = Task.builder().
-                title(dto.getTitle()).
-                description(dto.getDescription()).
-                completed(false).
-                createdAt(LocalDateTime.now())
-                .build();
+    public TaskResponseDTO createTask(TaskRequestDTO dto) {
+        Task task = TaskMapper.toEntity(dto);
 
         Task saved = repository.save(task);
 
-        return TaskResponseDTO.builder()
-                .id(saved.getId())
-                .title(saved.getTitle())
-                .description(saved.getDescription())
-                .completed(saved.isCompleted())
-                .createdAt(saved.getCreatedAt())
-                .build();
+        return TaskMapper.toResponse(saved);
     }
 }
