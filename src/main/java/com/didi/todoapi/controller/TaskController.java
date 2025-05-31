@@ -8,16 +8,13 @@ import com.didi.todoapi.service.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
 @RequestMapping("tasks")
-public class TaskController{
+public class TaskController {
     private final TaskService service;
 
     public TaskController(TaskService service) {
@@ -25,15 +22,26 @@ public class TaskController{
     }
 
     @GetMapping
-    public ResponseEntity<List<Task>> getAll () {
+    public ResponseEntity<List<Task>> getAll() {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.getAll());
     }
 
     @PostMapping
-    public ResponseEntity<TaskResponseDTO> createTask (@RequestBody TaskRequestDTO dto) {
+    public ResponseEntity<TaskResponseDTO> createTask(@RequestBody TaskRequestDTO dto) {
         TaskResponseDTO task = service.createTask(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(task);
 
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<TaskResponseDTO> editTask(@PathVariable Long id, @RequestParam boolean completed) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.editTask(id, completed));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.deleteTask(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

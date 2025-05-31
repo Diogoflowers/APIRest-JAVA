@@ -6,6 +6,7 @@ import com.didi.todoapi.dto.TaskRequestDTO;
 import com.didi.todoapi.dto.TaskResponseDTO;
 import com.didi.todoapi.mapper.TaskMapper;
 import com.didi.todoapi.repository.TaskRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -31,5 +32,16 @@ public class TaskService {
         Task saved = repository.save(task);
 
         return TaskMapper.toResponse(saved);
+    }
+
+    public TaskResponseDTO editTask(long id, boolean completed){
+        Task task = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tarefa não encontrada"));
+        task.setCompleted(completed);
+        return TaskMapper.toResponse(task);
+
+    }
+
+    public void deleteTask(Long id){
+        repository.deleteById(id);
     }
 }
