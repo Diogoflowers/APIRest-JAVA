@@ -10,8 +10,9 @@ import lombok.Setter;
 @Setter
 @Builder
 public class TaskRequestDTO {
+    @NotBlank(message = "A descrição é obrigatória")
+    private String description;
+
     @NotBlank(message = "O título é obrigatório")
     private String title;
-
-    private String description;
 }
