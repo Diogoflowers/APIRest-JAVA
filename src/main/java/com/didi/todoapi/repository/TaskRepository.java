@@ -1,7 +1,14 @@
 package com.didi.todoapi.repository;
 
 import com.didi.todoapi.domain.Task;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TaskRepository extends JpaRepository<Task, Long> {
+import java.util.List;
+import java.util.Optional;
+
+public interface TaskRepository {
+    Task save(Task task);
+    Optional<Task> findById(Long id);
+    List<Task> findAll();
+    void deleteById(Long id);
+
 }
